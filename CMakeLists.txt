@@ -2,8 +2,15 @@ cmake_minimum_required(VERSION 3.21)
 
 # --- 1. THE CACHE KILLERS (MUST BE BEFORE EVERYTHING ELSE) ---
 # This stops the re-downloading of bindings and dependencies
-set(GEODE_BINDINGS_REPO_PATH "D:/geode-bindings" CACHE PATH "Local bindings" FORCE)
-set(CPM_SOURCE_CACHE "D:/geode-cache" CACHE PATH "Global CPM cache" FORCE)
+# --- 1. THE CACHE KILLERS (ONLY FOR YOUR PC) ---
+if (EXISTS "D:/geode-cache")
+    set(GEODE_BINDINGS_REPO_PATH "D:/geode-bindings" CACHE PATH "Local bindings" FORCE)
+    set(CPM_SOURCE_CACHE "D:/geode-cache" CACHE PATH "Global CPM cache" FORCE)
+    message(STATUS "Using local D: drive cache for speed!")
+else()
+    message(STATUS "No D: drive found, using default GitHub Action paths.")
+endif()
+
 
 # 2. Set C++23 globally
 set(CMAKE_CXX_STANDARD 23)
@@ -43,3 +50,4 @@ add_library(${PROJECT_NAME} SHARED ${SOURCES})
 
 # Configure the mod
 setup_geode_mod(${PROJECT_NAME})
+
